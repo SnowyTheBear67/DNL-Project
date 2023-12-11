@@ -1,7 +1,12 @@
 package com.cognixia.jump.instructor;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.cognixia.jump.student.Student;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -46,6 +52,10 @@ public class Instructor implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Role role;
+	
+	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Student> students;
 
 	public Instructor() {
 		
