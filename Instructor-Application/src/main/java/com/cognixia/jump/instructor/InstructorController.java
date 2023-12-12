@@ -1,5 +1,17 @@
 package com.cognixia.jump.instructor;
 
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class InstructorController {
+
+	@Autowired 
+	private InstructorRepository service;
 	
 	@Autowired
-	InstructorRepository service;
-	
-	//@Autowired
-	//PasswordEncoder encoder;
-	
-	@GetMapping("/intructors")
+	PasswordEncoder encoder;
+  
+  @GetMapping("/intructors")
 	public List<Instructor> getAllInstructors(){
 		return service.findAll();
 	}
@@ -42,16 +54,22 @@ public class InstructorController {
 		return ResponseEntity.status(404).body("Instructor with id  = " + id + " was not found.");
 	}
 	
-	@PostMapping("/instructors/add")
-	public ResponseEntity<?> addInstructor(@RequestBody Instructor newInstructor){
+	
+	@PostMapping("/instructor")
+	public ResponseEntity<?> createInstructor( @RequestBody Instructor instructor ) {
 		
-		newInstructor.setId(null);
-
-		Instructor added = service.save(newInstructor);
+		instructor.setId(null);
 		
-		System.out.println("Added: " + added);
+		// will need to encode the password ourselves before it gets saved to the DB
+		// spring security won't know to do this automatically, so we need to make sure it
+		// gets done anytime we create a new user
+		instructor.setPassword( encoder.encode( instructor.getPassword() ) );
+				
 		
-		return ResponseEntity.status(201).body(added);
+		Instructor created = repo.save(instructor);
+		
+		return ResponseEntity.status(201).body(created);
+		
 	}
 	
 	@PutMapping("instructors/update")
@@ -85,5 +103,3 @@ public class InstructorController {
 		}
 		
 	}
-	
-}
