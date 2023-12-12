@@ -16,6 +16,7 @@ public class GlobalExceptionHandler {
 	
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
+	
 	public ResponseEntity<?> methodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request){
 		
 		// The following will find all the error messages that were found when validating the fields in the request and formatting our message so it can be passed

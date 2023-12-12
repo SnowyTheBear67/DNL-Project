@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 public class Instructor implements Serializable {
@@ -38,6 +39,7 @@ public class Instructor implements Serializable {
 	@NotBlank
 	private String lastName;
 	
+	@Schema(description = "Instructor username", example = "orquidia", required = true)
 	@Column(unique = true, nullable = false)
 	@NotBlank
 	private String username;
@@ -48,6 +50,7 @@ public class Instructor implements Serializable {
 	
 	@Column(columnDefinition = "boolean default true")
 	private boolean enabled;
+	
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
