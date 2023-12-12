@@ -22,8 +22,8 @@ public class InstructorController {
 	@Autowired
 	InstructorRepository service;
 	
-	@Autowired
-	PasswordEncoder encoder;
+	//@Autowired
+	//PasswordEncoder encoder;
 	
 	@GetMapping("/intructors")
 	public List<Instructor> getAllInstructors(){
