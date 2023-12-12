@@ -19,8 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Instructor Controller", description = "API for managing instructors")
 public class InstructorController {
 
 	@Autowired 
@@ -29,11 +38,20 @@ public class InstructorController {
 	@Autowired
 	PasswordEncoder encoder;
   
+  @Operation(summary="Get all the instructors from the instructor table")
   @GetMapping("/instructors")
 	public List<Instructor> getAllInstructors(){
 		return service.findAll();
 	}
 	
+ 
+  @ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Instructor has been found", 
+						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Instructor.class) ) ),
+			@ApiResponse(responseCode = "404", description = "Instructor was not found", 
+			 content = @Content ) 
+			})
+    @Operation(summary="Get instructor by id from the instructor table")
 	@GetMapping("/instructors/{id}")
 	public ResponseEntity<?> getInstructor(@PathVariable int id) throws ResourceNotFoundException {
 		
@@ -46,7 +64,10 @@ public class InstructorController {
 
 	}
 	
-	
+   
+  	@ApiResponse(responseCode = "201", description = "Instructor has been created", 
+						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Instructor.class) ) )
+    @Operation(summary="Create instructor")
 	@PostMapping("/instructor")
 	public ResponseEntity<?> createInstructor( @RequestBody Instructor instructor ) {
 		
@@ -63,7 +84,14 @@ public class InstructorController {
 		return ResponseEntity.status(201).body(created);
 		
 	}
-	
+  	
+  	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Instructor has been updated", 
+						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Instructor.class) ) ),
+			@ApiResponse(responseCode = "404", description = "Instructor was not found", 
+			 content = @Content ) 
+			})
+    @Operation(summary="Update instructor in the instructor table")
 	@PutMapping("instructors/update")
 	public ResponseEntity<?> updateInstructor(@RequestBody Instructor updateInstructor) throws ResourceNotFoundException{
 		
@@ -81,6 +109,13 @@ public class InstructorController {
 		
 	}
 	
+  	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Instructor has been deleted", 
+						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Instructor.class) ) ),
+			@ApiResponse(responseCode = "404", description = "Instructor was not found", 
+			 content = @Content ) 
+			})
+    @Operation(summary="Delete instructor by the specified id in the instructor table")
 	@DeleteMapping("instructors/delete/{id}")
 	public ResponseEntity<?> deleteInstructor(@PathVariable int id) throws ResourceNotFoundException {
 		

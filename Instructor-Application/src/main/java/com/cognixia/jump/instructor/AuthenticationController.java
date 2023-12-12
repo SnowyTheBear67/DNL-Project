@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cognixia.jump.instructor.AuthenticationRequest;
-import com.cognixia.jump.instructor.AuthenticationResponse;
+
 import com.cognixia.jump.jwt.JwtUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(name = "Authentication Controller", description = "API for managing authentication")
 public class AuthenticationController {
 
 	// authentication manager -> validates/authenticates user credentials
@@ -33,6 +36,7 @@ public class AuthenticationController {
 	
 	// create the token at http://localhost:8080/authenticate 
 	// send the username & password and try to generate a token as a response
+	@Operation(summary="Authenticates user and creates jwt")
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createJwtToken(@RequestBody AuthenticationRequest request) throws Exception {
 		
