@@ -29,7 +29,7 @@ public class InstructorController {
 	@Autowired
 	PasswordEncoder encoder;
   
-  @GetMapping("/intructors")
+  @GetMapping("/instructors")
 	public List<Instructor> getAllInstructors(){
 		return service.findAll();
 	}
