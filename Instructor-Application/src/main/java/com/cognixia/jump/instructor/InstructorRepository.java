@@ -8,6 +8,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InstructorRepository extends JpaRepository<Instructor, Integer> {
 	
+<<<<<<< Updated upstream
+=======
+	public Optional<Instructor>
+	findByUsername( String username );
+  
+>>>>>>> Stashed changes
 	public List<Instructor> findAll();
 
 }

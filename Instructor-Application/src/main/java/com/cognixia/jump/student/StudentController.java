@@ -1,5 +1,9 @@
 package com.cognixia.jump.student;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 import java.util.List;
 import java.util.Optional;
 
@@ -82,4 +86,16 @@ public class StudentController {
 		}
 		
 	}
+	
+	@GetMapping("/students/instructor/{instructorId}")
+    public ResponseEntity<?> getStudentsByInstructor(@PathVariable int instructorId) {
+
+        List<Student> students = service.findByInstructorId(instructorId);
+
+        if (!students.isEmpty()) {
+            return ResponseEntity.status(200).body(students);
+        }
+
+        return ResponseEntity.status(404).body("No students found for instructor with id = " + instructorId);
+    }
 }
