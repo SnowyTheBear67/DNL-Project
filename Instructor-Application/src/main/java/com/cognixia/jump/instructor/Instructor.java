@@ -117,7 +117,4 @@ public class Instructor implements Serializable {
 		this.role = role;
 	}
 	
-	
-	
-	
 }
