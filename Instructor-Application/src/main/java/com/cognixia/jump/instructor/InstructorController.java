@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cognixia.jump.exception.ResourceNotFoundException;
+
 @RestController
 @RequestMapping("/api")
 public class InstructorController {
@@ -33,15 +35,15 @@ public class InstructorController {
 	}
 	
 	@GetMapping("/instructors/{id}")
-	public ResponseEntity<?> getInstructor(@PathVariable int id){
+	public ResponseEntity<?> getInstructor(@PathVariable int id) throws ResourceNotFoundException {
 		
 		Optional<Instructor> instructor = service.findById(id);
 		
 		if(instructor.isPresent()) {
 			return ResponseEntity.status(200).body(instructor.get());
 		}
-		
-		return ResponseEntity.status(404).body("Instructor with id  = " + id + " was not found.");
+		throw new ResourceNotFoundException("Instructor", id);
+
 	}
 	
 	
@@ -55,7 +57,6 @@ public class InstructorController {
 		// gets done anytime we create a new user
 		instructor.setPassword( encoder.encode( instructor.getPassword() ) );
 				
-		
 		Instructor created = service.save(instructor);
 		
 		return ResponseEntity.status(201).body(created);
@@ -63,7 +64,8 @@ public class InstructorController {
 	}
 	
 	@PutMapping("instructors/update")
-	public ResponseEntity<?> updateInstructor(@RequestBody Instructor updateInstructor){
+	public ResponseEntity<?> updateInstructor(@RequestBody Instructor updateInstructor) throws ResourceNotFoundException{
+		
 		//check if student exists, then update them
 		
 		Optional<Instructor> found = service.findById(updateInstructor.getId());
@@ -73,13 +75,13 @@ public class InstructorController {
 			return ResponseEntity.status(200).body(updated);
 		}
 		else {
-			return ResponseEntity.status(404).body("Instructor with id = " + updateInstructor.getId() + " was not found.");
+			throw new ResourceNotFoundException("Instructor", updateInstructor.getId());
 		}
 		
 	}
 	
 	@DeleteMapping("instructors/delete/{id}")
-	public ResponseEntity<?> deleteInstructor(@PathVariable int id){
+	public ResponseEntity<?> deleteInstructor(@PathVariable int id) throws ResourceNotFoundException {
 		
 		Optional<Instructor> found = service.findById(id);
 		
@@ -89,7 +91,7 @@ public class InstructorController {
 			return ResponseEntity.status(200).body(found.get());
 		}
 		else {
-			return ResponseEntity.status(404).body("Instructor with id = " + id + " not found.");
+			throw new ResourceNotFoundException("Instructor", id);
 		}
 		
 	}
