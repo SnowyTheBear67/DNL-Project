@@ -57,6 +57,7 @@ public class InstructorController {
 		// gets done anytime we create a new user
 		instructor.setPassword( encoder.encode( instructor.getPassword() ) );
 				
+
 		Instructor created = service.save(instructor);
 		
 		return ResponseEntity.status(201).body(created);
