@@ -66,7 +66,7 @@ public class InstructorController {
 		instructor.setPassword( encoder.encode( instructor.getPassword() ) );
 				
 		
-		Instructor created = repo.save(instructor);
+		Instructor created = service.save(instructor);
 		
 		return ResponseEntity.status(201).body(created);
 		
@@ -103,3 +103,4 @@ public class InstructorController {
 		}
 		
 	}
+}
