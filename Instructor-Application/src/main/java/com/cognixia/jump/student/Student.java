@@ -4,8 +4,6 @@ package com.cognixia.jump.student;
 import java.io.Serializable;
 
 import com.cognixia.jump.instructor.Instructor;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

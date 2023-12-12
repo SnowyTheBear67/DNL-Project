@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cognixia.jump.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api")
@@ -56,7 +57,7 @@ public class StudentController {
 	}
 	
 	@PutMapping("students/update")
-	public ResponseEntity<?> updateStudent(@RequestBody Student updateStudent){
+	public ResponseEntity<?> updateStudent(@RequestBody Student updateStudent) throws ResourceNotFoundException {
 		//check if student exists, then update them
 		
 		Optional<Student> found = service.findById(updateStudent.getId());
@@ -66,13 +67,13 @@ public class StudentController {
 			return ResponseEntity.status(200).body(updated);
 		}
 		else {
-			return ResponseEntity.status(404).body("Student with id = " + updateStudent.getId() + " was not found.");
+			throw new ResourceNotFoundException("Student", updateStudent.getId());
 		}
 		
 	}
 	
 	@DeleteMapping("students/delete/{id}")
-	public ResponseEntity<?> deleteStudent(@PathVariable int id){
+	public ResponseEntity<?> deleteStudent(@PathVariable int id) throws ResourceNotFoundException{
 		
 		Optional<Student> found = service.findById(id);
 		
@@ -82,8 +83,20 @@ public class StudentController {
 			return ResponseEntity.status(200).body(found.get());
 		}
 		else {
-			return ResponseEntity.status(404).body("Student with id = " + id + " not found.");
+			throw new ResourceNotFoundException("Student", id);
 		}
 		
 	}
+	
+	@GetMapping("/students/instructor/{instructorId}")
+    public ResponseEntity<?> getStudentsByInstructor(@PathVariable int instructorId) throws ResourceNotFoundException {
+
+        List<Student> students = service.findByInstructorId(instructorId);
+
+        if (!students.isEmpty()) {
+            return ResponseEntity.status(200).body(students);
+        }
+        
+        throw new ResourceNotFoundException("Instructor", instructorId);
+    }
 }
