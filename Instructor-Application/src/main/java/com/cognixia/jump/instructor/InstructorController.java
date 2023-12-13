@@ -47,7 +47,7 @@ public class InstructorController {
 	}
 	
 	
-	@PostMapping("/instructor")
+	@PostMapping("/instructors")
 	public ResponseEntity<?> createInstructor( @RequestBody Instructor instructor ) {
 		
 		instructor.setId(null);
