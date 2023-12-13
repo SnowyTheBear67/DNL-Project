@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.cognixia.jump.service.MyUserDetailsService;
-import com.cognixia.jump.jwt.JwtUtil;
 
 // filters in spring are used to filter through requests/responses
 // perform some check for security before a request is completed or a response is sent
