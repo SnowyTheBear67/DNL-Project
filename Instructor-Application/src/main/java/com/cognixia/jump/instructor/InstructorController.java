@@ -41,6 +41,8 @@ public class InstructorController {
 	@Autowired
 	PasswordEncoder encoder;
   
+
+
   @Operation(summary="Get all the instructors from the instructor table")
   @GetMapping("/instructors")
 	public List<Instructor> getAllInstructors(){
@@ -63,9 +65,6 @@ public class InstructorController {
 		return ResponseEntity.status(200).body(found);
 
 	}
-	
-
-   
   	@ApiResponse(responseCode = "201", description = "Instructor has been created", 
 						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Instructor.class) ) )
     @Operation(summary="Create instructor")
