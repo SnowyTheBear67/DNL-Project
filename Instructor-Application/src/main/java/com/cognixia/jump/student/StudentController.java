@@ -24,33 +24,25 @@ import com.cognixia.jump.exception.ResourceNotFoundException;
 public class StudentController {
 
 	@Autowired
-	StudentRepository service;
+	StudentService service;
 	
 	@GetMapping("/students")
 	public List<Student> getAllStudents() {
-		return service.findAll();
+		return service.getAllStudents();
 	}
 	
 	@GetMapping("/students/{id}")
-	public ResponseEntity<?> getStudent(@PathVariable int id){
+	public ResponseEntity<?> getStudent(@PathVariable int id) throws ResourceNotFoundException {
 		
-		Optional<Student> student = service.findById(id);
+		Student student = service.getStudent(id);
 		
-		if(student.isPresent()) {
-			return ResponseEntity.status(200).body(student.get());
-		}
-		
-		return ResponseEntity.status(404).body("Student with id = " + id + " was not found.");
+		return ResponseEntity.status(200).body(student);
 	}
 	
 	@PostMapping("/students/add")
 	public ResponseEntity<?> addStudent(@RequestBody Student newStudent){
 		
-		newStudent.setId(-1);
-		
-		Student added = service.save(newStudent);
-		
-		System.out.println("Added: " + added);
+		Student added = service.addStudent(newStudent);
 		
 		return ResponseEntity.status(201).body(added);
 		
@@ -58,40 +50,26 @@ public class StudentController {
 	
 	@PutMapping("students/update")
 	public ResponseEntity<?> updateStudent(@RequestBody Student updateStudent) throws ResourceNotFoundException {
-		//check if student exists, then update them
 		
-		Optional<Student> found = service.findById(updateStudent.getId());
+		Student updated = service.updateStudent(updateStudent);
 		
-		if(found.isPresent()) {
-			Student updated = service.save(updateStudent);
-			return ResponseEntity.status(200).body(updated);
-		}
-		else {
-			throw new ResourceNotFoundException("Student", updateStudent.getId());
-		}
+		return ResponseEntity.status(200).body(updateStudent);
 		
 	}
 	
 	@DeleteMapping("students/delete/{id}")
 	public ResponseEntity<?> deleteStudent(@PathVariable int id) throws ResourceNotFoundException{
 		
-		Optional<Student> found = service.findById(id);
+		service.deleteStudent(id);
 		
-		if(found.isPresent()) {
-			service.deleteById(id);
-			
-			return ResponseEntity.status(200).body(found.get());
-		}
-		else {
-			throw new ResourceNotFoundException("Student", id);
-		}
+		return ResponseEntity.status(200).body("Deleted Student with id = " + id);
 		
 	}
 	
 	@GetMapping("/students/instructor/{instructorId}")
-    public ResponseEntity<?> getStudentsByInstructor(@PathVariable int instructorId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getStudentsByInstructorId(@PathVariable int instructorId) throws ResourceNotFoundException {
 
-        List<Student> students = service.findByInstructorId(instructorId);
+		List<Student> students = service.getStudentsByInstructorId(instructorId);
 
         if (!students.isEmpty()) {
             return ResponseEntity.status(200).body(students);

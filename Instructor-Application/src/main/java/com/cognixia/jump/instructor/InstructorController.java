@@ -4,7 +4,10 @@ package com.cognixia.jump.instructor;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,76 +27,50 @@ import com.cognixia.jump.exception.ResourceNotFoundException;
 public class InstructorController {
 
 	@Autowired 
-	private InstructorRepository service;
+	private InstructorService service;
 	
 	@Autowired
 	PasswordEncoder encoder;
   
-  @GetMapping("/instructors")
+	@GetMapping("/instructors")
 	public List<Instructor> getAllInstructors(){
-		return service.findAll();
+		return service.getAllInstructors();
 	}
 	
 	@GetMapping("/instructors/{id}")
 	public ResponseEntity<?> getInstructor(@PathVariable int id) throws ResourceNotFoundException {
 		
-		Optional<Instructor> instructor = service.findById(id);
+		Instructor found = service.getInstructor(id);
 		
-		if(instructor.isPresent()) {
-			return ResponseEntity.status(200).body(instructor.get());
-		}
-		throw new ResourceNotFoundException("Instructor", id);
+		return ResponseEntity.status(200).body(found);
 
 	}
 	
 	
-	@PostMapping("/instructor")
-	public ResponseEntity<?> createInstructor( @RequestBody Instructor instructor ) {
+	@PostMapping("/instructors")
+	public ResponseEntity<?> createInstructor(@Valid @RequestBody Instructor instructor ) {
 		
-		instructor.setId(null);
-		
-		// will need to encode the password ourselves before it gets saved to the DB
-		// spring security won't know to do this automatically, so we need to make sure it
-		// gets done anytime we create a new user
-		instructor.setPassword( encoder.encode( instructor.getPassword() ) );
-				
-
-		Instructor created = service.save(instructor);
+		Instructor created = service.createInstructor(instructor);
 		
 		return ResponseEntity.status(201).body(created);
 		
 	}
 	
-	@PutMapping("instructors/update")
+	@PutMapping("/instructors/update")
 	public ResponseEntity<?> updateInstructor(@RequestBody Instructor updateInstructor) throws ResourceNotFoundException{
 		
-		//check if student exists, then update them
+		Instructor updated = service.updateInstructor(updateInstructor);
 		
-		Optional<Instructor> found = service.findById(updateInstructor.getId());
-		
-		if(found.isPresent()) {
-			Instructor updated = service.save(updateInstructor);
-			return ResponseEntity.status(200).body(updated);
-		}
-		else {
-			throw new ResourceNotFoundException("Instructor", updateInstructor.getId());
-		}
+		return ResponseEntity.status(200).body(updated);
 		
 	}
 	
-	@DeleteMapping("instructors/delete/{id}")
+	@DeleteMapping("/instructors/delete/{id}")
 	public ResponseEntity<?> deleteInstructor(@PathVariable int id) throws ResourceNotFoundException {
 		
-		Optional<Instructor> found = service.findById(id);
+		service.deleteInstructor(id);
 		
-		if(found.isPresent()) {
-			service.deleteById(id);
-			
-			return ResponseEntity.status(200).body(found.get());
-		}
-		else {
-			throw new ResourceNotFoundException("Instructor", id);
-		}
+		return ResponseEntity.status(200).body("Deleted Instructor with id = " + id);
 		
 	}
 }

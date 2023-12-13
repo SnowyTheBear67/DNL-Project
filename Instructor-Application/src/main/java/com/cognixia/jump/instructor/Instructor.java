@@ -60,6 +60,17 @@ public class Instructor implements Serializable {
 	public Instructor() {
 		
 	}
+	
+	public Instructor(Integer id, String first_name, String last_name, String username, String password, boolean enabled, Role role) {
+		super();
+		this.id = id;
+		this.firstName = first_name;
+		this.lastName = last_name;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.role = role;
+	}
 
 	public Integer getId() {
 		return id;
@@ -115,6 +126,17 @@ public class Instructor implements Serializable {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public String toJson() {
+
+		return "{\"id\" : " + id 
+				+ ", \"firstName\" : \"" + firstName + "\""
+				+ ", \"lastName\" : \"" + lastName + "\""
+				+ ", \"username\" : \"" + username + "\""
+				+ ", \"password\" : \"" + password + "\"" 
+				+ ", \"enabled\" : " + enabled 
+				+ ", \"role\" : \"" + role + "\"}";
 	}
 	
 }

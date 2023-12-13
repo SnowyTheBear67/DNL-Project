@@ -3,6 +3,7 @@ package com.cognixia.jump.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +24,6 @@ public class MyUserDetailsService implements UserDetailsService {
 	// username will be passed to this method (as an argument), then will call the UserRepository in order to find a user with that username
 	// As long as this user is found, User info will be passed to a UserDetails object and returned
 		
-	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
