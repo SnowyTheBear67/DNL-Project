@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 public class Instructor implements Serializable {
@@ -38,6 +39,7 @@ public class Instructor implements Serializable {
 	@NotBlank
 	private String lastName;
 	
+	@Schema(description = "Instructor username", example = "orquidia", required = true)
 	@Column(unique = true, nullable = false)
 	@NotBlank
 	private String username;
@@ -49,6 +51,7 @@ public class Instructor implements Serializable {
 	@Column(columnDefinition = "boolean default true")
 	private boolean enabled;
 	
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Role role;
@@ -59,6 +62,17 @@ public class Instructor implements Serializable {
 
 	public Instructor() {
 		
+	}
+	
+	public Instructor(Integer id, String first_name, String last_name, String username, String password, boolean enabled, Role role) {
+		super();
+		this.id = id;
+		this.firstName = first_name;
+		this.lastName = last_name;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.role = role;
 	}
 
 	public Integer getId() {
@@ -115,6 +129,17 @@ public class Instructor implements Serializable {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public String toJson() {
+
+		return "{\"id\" : " + id 
+				+ ", \"firstName\" : \"" + firstName + "\""
+				+ ", \"lastName\" : \"" + lastName + "\""
+				+ ", \"username\" : \"" + username + "\""
+				+ ", \"password\" : \"" + password + "\"" 
+				+ ", \"enabled\" : " + enabled 
+				+ ", \"role\" : \"" + role + "\"}";
 	}
 	
 }

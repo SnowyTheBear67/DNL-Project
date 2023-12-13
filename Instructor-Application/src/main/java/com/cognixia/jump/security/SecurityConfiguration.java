@@ -48,9 +48,15 @@ public class SecurityConfiguration {
 				.authorizeRequests()
 				.antMatchers("/login").permitAll()
 				.antMatchers(HttpMethod.POST, "/api/instructor").permitAll() // anyone can create a user (user sign ups)
+				.antMatchers(HttpMethod.GET, "/api/instructors").permitAll()
+				.antMatchers("/openapi.html").permitAll()
+				
 				.antMatchers("/authenticate").permitAll() // anyone can ATTEMPT to create a JWT
-			
-//				.anyRequest().authenticated()						   // if not specified, all other end points need a user login
+		   // if not specified, all other end points need a user login
+
+				//to be able to view Swagger documentation comment the line below
+				.anyRequest().authenticated()						   // if not specified, all other end points need a user login
+
 				.and()
 				.sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS ); // tell spring security NOT to create sessions
 		
@@ -94,7 +100,6 @@ public class SecurityConfiguration {
 
 	
 }
-
 
 
 
