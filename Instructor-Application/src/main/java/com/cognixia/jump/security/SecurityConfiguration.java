@@ -50,7 +50,7 @@ public class SecurityConfiguration {
 				.antMatchers(HttpMethod.POST, "/api/instructor").permitAll() // anyone can create a user (user sign ups)
 				.antMatchers("/authenticate").permitAll() // anyone can ATTEMPT to create a JWT
 			
-				.anyRequest().authenticated()						   // if not specified, all other end points need a user login
+//				.anyRequest().authenticated()						   // if not specified, all other end points need a user login
 				.and()
 				.sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS ); // tell spring security NOT to create sessions
 		

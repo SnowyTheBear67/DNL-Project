@@ -63,3 +63,26 @@
   justify-content: space-between;
   gap: 10px;
 }
+.list-spacing {
+  display: flex;
+  flex-direction: row;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  /* padding-top: 10px; */
+  margin: 20px;
+}
+.dash-title {
+  font-size: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
