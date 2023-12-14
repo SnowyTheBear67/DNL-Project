@@ -68,6 +68,8 @@ const Api = {
         console.log("Data", data);
         if (data.jwt) {
           localStorage.setItem("jwtToken", data.jwt);
+          // setisLoggedIn(false);
+          // console.log(true);
           return data.jwt; // Return the token from the response
         } else {
           throw new Error("Token not found in the response");
@@ -82,8 +84,7 @@ const Api = {
   getAllStudents: (setStudent) => {
     const storedToken = localStorage.getItem("jwtToken");
     const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${storedToken}`,
+      authorization: `Bearer ${storedToken}`,
     };
     fetch(allStudents, {
       method: "GET",
@@ -93,7 +94,7 @@ const Api = {
         return response.json();
       })
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         // return data;
         setStudent(data);
         // console.log(Student);

@@ -7,9 +7,9 @@ const Login = (props) => {
     setUser,
     userLogin,
     setUserLogin,
-    token,
-    setToken,
-    handleLoginFunc,
+    setisLoggedIn,
+    fetchAllStudents,
+    setStudent,
   } = props;
 
   const handleChangeUsername = (event) => {
@@ -58,7 +58,17 @@ const Login = (props) => {
 
   const handleSubmitLogin = (event) => {
     event.preventDefault();
-    Api.loginUser(userLogin, setToken);
+    setStudent([]);
+    Api.loginUser(userLogin).then((data) => {
+      debugger;
+      if (data) {
+        console.log(true);
+        setisLoggedIn(false);
+        fetchAllStudents(setStudent);
+      } else {
+        setisLoggedIn(true);
+      }
+    });
     setUserLogin({
       username: "",
       password: "",
@@ -130,9 +140,7 @@ const Login = (props) => {
               />
             </div>
             <div>
-              <button className="btn btn-primary" onClick={handleLoginFunc}>
-                Login
-              </button>
+              <button className="btn btn-primary">Login</button>
             </div>
           </form>
         </div>
