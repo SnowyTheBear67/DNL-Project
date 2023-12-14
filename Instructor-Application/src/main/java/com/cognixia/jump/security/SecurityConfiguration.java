@@ -46,8 +46,7 @@ public class SecurityConfiguration {
 	
 		http.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/login").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/instructor").permitAll() // anyone can create a user (user sign ups)
+				.antMatchers(HttpMethod.POST, "/api/instructors").permitAll() // anyone can create a user (user sign ups)
 				.antMatchers(HttpMethod.GET, "/api/instructors").permitAll()
 				.antMatchers("/openapi.html").permitAll()
 				

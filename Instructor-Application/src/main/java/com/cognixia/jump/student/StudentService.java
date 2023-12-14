@@ -8,12 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
+import com.cognixia.jump.instructor.Instructor;
+import com.cognixia.jump.instructor.InstructorRepository;
 
 @Service
 public class StudentService {
 
 	@Autowired
 	StudentRepository repo;
+	
+	@Autowired
+	InstructorRepository instructorRepo;
 	
 	public List<Student> getAllStudents() {
 		return repo.findAll();
@@ -62,9 +67,14 @@ public class StudentService {
 		throw new ResourceNotFoundException("Student", id);
 	}
 	
-	public List<Student> getStudentsByInstructorId (int instructorId) {
+	public List<Student> getStudentsByInstructorUsername (String username) throws ResourceNotFoundException {
 		
-		List<Student> students = repo.findByInstructorId(instructorId);
+		Optional<Instructor> found = instructorRepo.findByUsername(username);
+		
+		if(found.isEmpty()) {
+			throw new ResourceNotFoundException("Instructor", username);
+		}
+		List<Student> students = repo.findByInstructorUsername(username);
 		
 		return students;
 	}

@@ -14,9 +14,9 @@ public interface StudentRepository extends JpaRepository<Student,Integer>{
   
 	public List<Student> findAll();
   
-	//Custom query to find students by instructor ID
-	@Query("SELECT s FROM Student s WHERE s.instructor.id = :instructorId")
-	List<Student> findByInstructorId(@Param("instructorId") Integer instructorId);
+	// Custom query to find students by instructor username
+	@Query("SELECT s FROM Student s WHERE s.instructor.username = :instructorUsername")
+	List<Student> findByInstructorUsername(@Param("instructorUsername") String instructorUsername);
   
   
   

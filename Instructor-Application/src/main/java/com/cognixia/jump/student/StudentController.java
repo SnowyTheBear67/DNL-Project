@@ -112,16 +112,12 @@ public class StudentController {
 			 			 content = @Content ) 
 		}
 	)
-	@Operation(summary = "Get the students by specified instructor id")
-	@GetMapping("/students/instructor/{instructorId}")
-    public ResponseEntity<?> getStudentsByInstructorId(@PathVariable int instructorId) throws ResourceNotFoundException {
+	@Operation(summary = "Get the students by specified instructor username")
+	@GetMapping("/students/instructor/{username}")
+    public ResponseEntity<?> getStudentsByInstructorUsername(@PathVariable String username) throws ResourceNotFoundException {
 
-		List<Student> students = service.getStudentsByInstructorId(instructorId);
-
-        if (!students.isEmpty()) {
-            return ResponseEntity.status(200).body(students);
-        }
-        
-        throw new ResourceNotFoundException("Instructor", instructorId);
+		List<Student> students = service.getStudentsByInstructorUsername(username);
+		
+		return ResponseEntity.status(200).body(students);
     }
 }
