@@ -13,6 +13,7 @@
 	<version>0.0.1</version>
 	<name>Instructor-Application</name>
 	<description>Instructor Application Project</description>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -61,7 +62,6 @@
 		    <artifactId>jjwt</artifactId>
 		    <version>0.9.1</version>
 		</dependency>
-		
 		<dependency>
 			 <groupId>org.springdoc</groupId>
 			 <artifactId>springdoc-openapi-ui</artifactId>

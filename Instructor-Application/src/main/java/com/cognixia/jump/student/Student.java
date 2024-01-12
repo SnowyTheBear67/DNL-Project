@@ -128,6 +128,14 @@ public class Student implements Serializable {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	
+	public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
 
 	@Override
 	public String toString() {

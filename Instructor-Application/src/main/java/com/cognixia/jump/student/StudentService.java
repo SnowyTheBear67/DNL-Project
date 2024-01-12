@@ -35,13 +35,6 @@ public class StudentService {
 		return found.get();
 	}
 	
-	public Student addStudent(Student student) {
-		student.setId(null);
-		
-		Student added = repo.save(student);
-		
-		return added;
-	}
 	
 	public Student updateStudent(Student student) throws ResourceNotFoundException{ 
 		boolean exists = repo.existsById(student.getId());
@@ -79,5 +72,27 @@ public class StudentService {
 		return students;
 	}
 	
-	
+	public Student addStudent(Student student) throws ResourceNotFoundException {
+        student.setId(null);
+        
+        // Fetch the instructor using the provided instructorId
+        Optional<Instructor> instructorOptional = instructorRepo.findById(student.getInstructor().getId());
+        
+        //Student added = repo.save(student);
+        
+        if (instructorOptional.isPresent()) {
+            // Set the fetched instructor in the student object
+            Instructor instructor = instructorOptional.get();
+            student.setInstructor(instructor);
+            
+            // Save the student with the associated instructor
+            Student added = repo.save(student);
+            
+            return added;
+        } else {
+            throw new ResourceNotFoundException("Instructor", student.getInstructor().getId());
+        }
+        
+        
+    }
 }
