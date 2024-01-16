@@ -1,9 +1,11 @@
 package com.cognixia.jump.student;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -19,6 +21,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
+import com.cognixia.jump.instructor.Instructor;
+import com.cognixia.jump.instructor.InstructorRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class StudentServiceTest {
@@ -28,6 +32,9 @@ public class StudentServiceTest {
 	
 	@InjectMocks
 	private StudentService service;
+	
+	@Mock 
+    InstructorRepository instructorRepo;
 	
 	@Test
 	void testGetAllStudents() throws Exception {
@@ -76,17 +83,23 @@ public class StudentServiceTest {
 	}
 	
 	@Test
-	void testAddStudent () throws Exception {
-		
-		Student student = new Student(1, "Peppa", "Pig", "peppa@gmail.com", 85, "Oct", "");
-		
-		when( repo.save(student) ).thenReturn(student);
-		
-		Student result = service.addStudent(student);
-		
-		assertEquals(student, result);
-	}
-	
+    void testAddStudent () throws Exception {
+        // Mocking an instructor
+        Instructor instructor = new Instructor(1, "John", "Doe", "johndoe", "password", true, Instructor.Role.ROLE_USER);
+        when(instructorRepo.findById(any())).thenReturn(Optional.of(instructor));
+        
+        Student student = new Student(1, "Peppa", "Pig", "peppa@gmail.com", 85, "Oct", "notes");
+        student.setInstructor(instructor); // Setting the instructor ID
+
+        
+        when( repo.save(student) ).thenReturn(student);
+        
+        Student result = service.addStudent(student);
+        
+        verify(repo).save(student);
+        
+        assertEquals(student, result);
+    }
 	@Test
 	void testUpdateStudent() throws Exception {
 		Student student = new Student(1, "Peppa", "Pig", "peppa@gmail.com", 85, "Oct", "");

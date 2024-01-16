@@ -10,7 +10,10 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 
+
+
 @SpringBootApplication
+
 @OpenAPIDefinition(
 		// provides meta data on the API service
 		info = @Info(
@@ -25,6 +28,7 @@ import io.swagger.v3.oas.annotations.info.License;
 		
 
 )
+
 public class InstructorApplication {
 
 	public static void main(String[] args) {

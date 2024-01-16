@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,7 +65,7 @@ public class StudentController {
 						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Student.class) ) )
 	@Operation(summary = "Add student to the student table")
 	@PostMapping("/students/add")
-	public ResponseEntity<?> addStudent(@RequestBody Student newStudent){
+	public ResponseEntity<?> addStudent(@Valid @RequestBody Student newStudent) throws ResourceNotFoundException{
 		
 		Student added = service.addStudent(newStudent);
 		
@@ -80,7 +82,7 @@ public class StudentController {
 	)
 	@Operation(summary = "Update student with the specified id in the student table")
 	@PutMapping("students/update")
-	public ResponseEntity<?> updateStudent(@RequestBody Student updateStudent) throws ResourceNotFoundException {
+	public ResponseEntity<?> updateStudent(@Valid @RequestBody Student updateStudent) throws ResourceNotFoundException {
 		
 		Student updated = service.updateStudent(updateStudent);
 		

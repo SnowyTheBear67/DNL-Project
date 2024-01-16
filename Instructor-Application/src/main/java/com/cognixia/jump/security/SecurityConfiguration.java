@@ -48,9 +48,26 @@ public class SecurityConfiguration {
 				.authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/instructors").permitAll() // anyone can create a user (user sign ups)
 				.antMatchers(HttpMethod.GET, "/api/instructors").permitAll()
-				.antMatchers("/openapi.html").permitAll()
+				.antMatchers("/api/v1/auth/**",
+						"/v2/api-docs",
+						"/v3/api-docs",
+						"/v2/api-docs/**",
+						"/v3/api-docs/**",
+						"/swagger-resources",
+						"/swagger-resources/**",
+						"/configuration/ui",
+						"/configuration/security",
+						"/swagger-ui/**",
+						"/webjars/**",
+						"/swagger-ui.html").permitAll()
+				.antMatchers(HttpMethod.GET,"/api/students").authenticated()  
+				.antMatchers(HttpMethod.GET,"/api/students/**").authenticated() 
+				.antMatchers(HttpMethod.POST,"/students/add").authenticated()
+				.antMatchers(HttpMethod.PUT,"students/update").authenticated()
+				.antMatchers(HttpMethod.DELETE,"students/delete/**").authenticated()
+				.antMatchers(HttpMethod.GET,"/students/instructor/**").authenticated()
+				.antMatchers(HttpMethod.POST,"/authenticate").permitAll()       // anyone can ATTEMPT to create a JWT
 				
-				.antMatchers("/authenticate").permitAll() // anyone can ATTEMPT to create a JWT
 		   // if not specified, all other end points need a user login
 
 				//to be able to view Swagger documentation comment the line below

@@ -1,6 +1,6 @@
 import Students from "../components/Students";
 
-const URI = "http://3.236.196.185:8080";
+const URI = "http://localhost:8080";
 const addInstructor = URI + "/api/instructors";
 const loginInstructor = URI + "/authenticate";
 const allStudents = URI + "/api/students";
