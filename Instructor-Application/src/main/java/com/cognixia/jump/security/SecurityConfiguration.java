@@ -16,8 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import com.cognixia.jump.jwt.JwtRequestFilter;
 
 @Configuration
@@ -45,7 +43,8 @@ public class SecurityConfiguration {
 		
 	
 		http.csrf().disable()
-				.authorizeRequests()
+		.cors().and()
+		.authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/instructors").permitAll() // anyone can create a user (user sign ups)
 				.antMatchers(HttpMethod.GET, "/api/instructors").permitAll()
 				.antMatchers("/api/v1/auth/**",
@@ -68,9 +67,7 @@ public class SecurityConfiguration {
 				.antMatchers(HttpMethod.GET,"/students/instructor/**").authenticated()
 				.antMatchers(HttpMethod.POST,"/authenticate").permitAll()       // anyone can ATTEMPT to create a JWT
 				
-		   // if not specified, all other end points need a user login
-
-				//to be able to view Swagger documentation comment the line below
+		    // if not specified, all other end points need a user login
 				.anyRequest().authenticated()						   // if not specified, all other end points need a user login
 
 				.and()
