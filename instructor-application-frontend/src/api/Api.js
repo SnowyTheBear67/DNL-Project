@@ -10,6 +10,7 @@ const allStudentsByInstructor = (username) =>
   URI + `/api/students/instructor/${username}`;
 const allInstructor = URI + `/api/instructors`;
 const deleteStudent = (id) => URI + `/api/students/delete/${id}`;
+const updateStudent = URI + "/api/students/update";
 const addStudentEndPoint = URI + "/api/students/add";
 const Api = {
   addUser: (user) => {
@@ -185,6 +186,21 @@ const Api = {
       .catch((error) => {
         console.log("error detected");
         // console.log(error);
+      });
+  },
+  updateStudent: (id) => {
+    const storedToken = localStorage.getItem("jwtToken");
+    fetch(updateStudent, {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${storedToken}`,
+      },
+    })
+      .then((data) => {
+        console.log("data grabed");
+      })
+      .catch((error) => {
+        console.log("Error");
       });
   },
 };

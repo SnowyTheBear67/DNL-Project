@@ -7,7 +7,7 @@ const Students = (props) => {
   const { student, setStudent, setisLoggedIn } = props;
   const [isAddingStudent, setIsAddingStudent] = useState(false);
   const [isUpdateStudent, setIsUpdateStudent] = useState(false);
-  const [updatedStudent, setIsUpdatedStudent] = useState({
+  const [updatedStudent, setUpdatedStudent] = useState({
     id: null,
     firstName: "",
     lastName: "",
@@ -59,8 +59,21 @@ const Students = (props) => {
     const updatedStudents = student.filter((student) => student.id !== id);
     setStudent(updatedStudents);
   };
-  const handleEdit = () => {
+  const handleEdit = (id) => {
     setIsUpdateStudent(!isUpdateStudent);
+    Api.updateStudent(id);
+    setUpdatedStudent({
+      id: "",
+      firstName: "",
+      lastName: "",
+      grade: "",
+      email: "",
+      notes: "",
+      jumpClass: "",
+      instructor: {
+        id: "",
+      },
+    });
   };
   const handleAddStudents = () => {
     // debugger;
@@ -299,6 +312,18 @@ const Students = (props) => {
                 <h5 className="card-title">Notes</h5>
                 <p className="card-text" style={{ paddingLeft: "65px" }}>
                   {student.notes}
+                </p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  //   justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
+                <h5 className="card-title">Email</h5>
+                <p className="card-text" style={{ paddingLeft: "70px" }}>
+                  {student.email}
                 </p>
               </div>
             </div>
