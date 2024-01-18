@@ -6,6 +6,7 @@ const Students = (props) => {
   // const [id, setId] = useState("");
   const { student, setStudent, setisLoggedIn } = props;
   const [isAddingStudent, setIsAddingStudent] = useState(false);
+  const [isEditingStudent, setIsEditingStudent] = useState(false);
   const [isUpdateStudent, setIsUpdateStudent] = useState(false);
   const [updatedStudent, setUpdatedStudent] = useState({
     id: null,
@@ -15,7 +16,9 @@ const Students = (props) => {
     grade: "",
     notes: "",
     email: "",
-    instructorId: "",
+    instructor: {
+      id: "",
+    },
   });
   const [newStudent, setNewStudent] = useState({
     id: null,
@@ -54,14 +57,11 @@ const Students = (props) => {
     setStudent((prevStudents) => [...prevStudents, newStudent]);
     setIsAddingStudent(false);
   };
-  const handleDelete = (id) => {
-    Api.deleteStudent(id);
-    const updatedStudents = student.filter((student) => student.id !== id);
-    setStudent(updatedStudents);
-  };
-  const handleEdit = (id) => {
-    setIsUpdateStudent(!isUpdateStudent);
-    Api.updateStudent(id);
+  const handleSaveEditStudent = (id) => {
+    Api.updateStudent(updatedStudent);
+    setStudent((prevStudents) =>
+      prevStudents.map((s) => (s.id === id ? { ...s, ...updatedStudent } : s))
+    );
     setUpdatedStudent({
       id: "",
       firstName: "",
@@ -74,7 +74,31 @@ const Students = (props) => {
         id: "",
       },
     });
+    // am  adding new student insted of editing it
+    // empty the state and re render the list
+    // setStudent([]);
+    // debugger;
+    // setStudent([]);
+    // setStudent([student, updatedStudent]);
+    // setStudent([student]);
+    setStudent((prevStudents) => [...prevStudents]);
+    setIsEditingStudent(false);
   };
+  const handleDelete = (id) => {
+    Api.deleteStudent(id);
+    const updatedStudents = student.filter((student) => student.id !== id);
+    setStudent(updatedStudents);
+  };
+  const handleEdit = (id) => {
+    // setIsUpdateStudent(!isUpdateStudent);
+    setIsEditingStudent(!isEditingStudent);
+    const studentToEdit = student.find((s) => s.id === id);
+    setUpdatedStudent({
+      ...updatedStudent,
+      id: id,
+    });
+  };
+
   const handleAddStudents = () => {
     // debugger;
     setIsAddingStudent(!isAddingStudent);
@@ -98,93 +122,6 @@ const Students = (props) => {
           </button>
         </div>
       </div>
-      {isUpdateStudent && (
-        <div className="grid-container">
-          <div className="card border-info mb-3" style={{ maxWidth: "18rem" }}>
-            <div className="card-header">
-              <input
-                type="text"
-                placeholder="First Name"
-                value={updatedStudent.firstName}
-                onChange={(e) =>
-                  setNewStudent({
-                    ...updatedStudent,
-                    firstName: e.target.value,
-                  })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                value={updatedStudent.lastName}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, lastName: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Jump Class"
-                value={updatedStudent.jumpClass}
-                onChange={(e) =>
-                  setNewStudent({
-                    ...updatedStudent,
-                    jumpClass: e.target.value,
-                  })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Grades"
-                value={updatedStudent.grade}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, grade: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Notes"
-                value={updatedStudent.notes}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, notes: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Email"
-                value={updatedStudent.email}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, email: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Instructor ID"
-                value={
-                  updatedStudent.instructor ? updatedStudent.instructor.id : ""
-                }
-                onChange={(e) =>
-                  setNewStudent({
-                    ...updatedStudent,
-                    instructor: { id: e.target.value },
-                  })
-                }
-              />
-            </div>
-            <div className="card-body">
-              {/* Add input fields for other properties of the new student */}
-            </div>
-            <div className="btn-group" role="group" aria-label="Basic example">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => handleSaveUpdatedStudent()}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {isAddingStudent && (
         <div className="grid-container">
           <div className="card border-info mb-3" style={{ maxWidth: "18rem" }}>
@@ -257,6 +194,103 @@ const Students = (props) => {
                 type="button"
                 className="btn btn-primary"
                 onClick={() => handleSaveNewStudent()}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isEditingStudent && (
+        <div className="grid-container">
+          <div className="card border-info mb-3" style={{ maxWidth: "18rem" }}>
+            <div className="card-header">
+              <input
+                type="text"
+                placeholder="First Name"
+                value={updatedStudent.firstName}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    firstName: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={updatedStudent.lastName}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    lastName: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Jump Class"
+                value={updatedStudent.jumpClass}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    jumpClass: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Grades"
+                value={updatedStudent.grade}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    grade: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Notes"
+                value={updatedStudent.notes}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    notes: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Email"
+                value={updatedStudent.email}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    email: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Instructor ID"
+                value={updatedStudent.instructor.id}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    instructor: { id: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div className="card-body">
+              {/* Add input fields for other properties of the new student */}
+            </div>
+            <div className="btn-group" role="group" aria-label="Basic example">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSaveEditStudent()}
               >
                 Save
               </button>
@@ -341,7 +375,7 @@ const Students = (props) => {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => handleEdit()}
+                onClick={() => handleEdit(student.id)}
               >
                 Edit
               </button>

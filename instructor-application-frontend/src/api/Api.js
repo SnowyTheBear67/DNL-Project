@@ -59,7 +59,7 @@ const Api = {
           localStorage.setItem("jwtToken", data.jwt);
           // setisLoggedIn(false);
           // console.log(true);
-          debugger;
+          // debugger;
           return data.jwt; // Return the token from the response
         } else {
           throw new Error("Token not found in the response");
@@ -188,13 +188,15 @@ const Api = {
         // console.log(error);
       });
   },
-  updateStudent: (id) => {
+  updateStudent: (updatedStudent) => {
     const storedToken = localStorage.getItem("jwtToken");
     fetch(updateStudent, {
       method: "PUT",
       headers: {
+        "Content-Type": "application/json",
         authorization: `Bearer ${storedToken}`,
       },
+      body: JSON.stringify(updatedStudent),
     })
       .then((data) => {
         console.log("data grabed");

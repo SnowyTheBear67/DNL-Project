@@ -20,7 +20,7 @@ function App() {
   const [isLoggedIn, setisLoggedIn] = useState(true);
   const [student, setStudent] = useState([]);
   const fetchAllStudents = (setStudent, username) => {
-    debugger;
+    // debugger;
     Api.findStudentsInstructorUsername(setStudent, username);
     // .then((data) => {
     //   // setStudent(data);
