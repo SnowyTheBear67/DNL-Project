@@ -58,6 +58,8 @@ function App() {
           student={student}
           setStudent={setStudent}
           setisLoggedIn={setisLoggedIn}
+          fetchAllStudents={fetchAllStudents}
+          userLogin={userLogin}
         />
       )}
     </div>

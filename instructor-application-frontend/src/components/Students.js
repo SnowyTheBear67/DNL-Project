@@ -4,10 +4,12 @@ import Api from "../api/Api";
 
 const Students = (props) => {
   // const [id, setId] = useState("");
-  const { student, setStudent, setisLoggedIn } = props;
+  const { student, setStudent, setisLoggedIn, fetchAllStudents, userLogin } =
+    props;
   const [isAddingStudent, setIsAddingStudent] = useState(false);
   const [isEditingStudent, setIsEditingStudent] = useState(false);
   const [isUpdateStudent, setIsUpdateStudent] = useState(false);
+  const [currEditingStudent, setcurrEditingStudent] = useState("");
   const [updatedStudent, setUpdatedStudent] = useState({
     id: null,
     firstName: "",
@@ -59,9 +61,32 @@ const Students = (props) => {
   };
   const handleSaveEditStudent = (id) => {
     Api.updateStudent(updatedStudent);
-    setStudent((prevStudents) =>
-      prevStudents.map((s) => (s.id === id ? { ...s, ...updatedStudent } : s))
-    );
+    console.log(id);
+
+    setStudent((prevStudents) => {
+      return prevStudents.map((s) => {
+        console.log("inside student");
+        console.log(s.id);
+        console.log("space");
+        console.log(id);
+        if (s.id === id) {
+          console.log("This is the updated student" + updatedStudent);
+        }
+        // return {
+        //   id: i,
+        //   firstName: "",
+        //   lastName: "",
+        //   grade: "",
+        //   email: "",
+        //   notes: "",
+        //   jumpClass: "",
+        //   instructor: {
+        //     id: "",
+        //   },
+        // };
+        return s.id === id ? updatedStudent : s;
+      });
+    });
     setUpdatedStudent({
       id: "",
       firstName: "",
@@ -81,7 +106,11 @@ const Students = (props) => {
     // setStudent([]);
     // setStudent([student, updatedStudent]);
     // setStudent([student]);
-    setStudent((prevStudents) => [...prevStudents]);
+    // setStudent((prevStudents) => [...prevStudents, updatedStudent]);
+    console.log(updatedStudent);
+    console.log("here 1");
+    // fetchAllStudents(setStudent, "test");
+    console.log("here 2");
     setIsEditingStudent(false);
   };
   const handleDelete = (id) => {
@@ -93,6 +122,8 @@ const Students = (props) => {
     // setIsUpdateStudent(!isUpdateStudent);
     setIsEditingStudent(!isEditingStudent);
     const studentToEdit = student.find((s) => s.id === id);
+    console.log(id);
+    setcurrEditingStudent(id);
     setUpdatedStudent({
       ...updatedStudent,
       id: id,
@@ -290,7 +321,7 @@ const Students = (props) => {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleSaveEditStudent()}
+                onClick={() => handleSaveEditStudent(currEditingStudent)}
               >
                 Save
               </button>

@@ -125,9 +125,9 @@ const Api = {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         // return data;
         setStudent(data);
+        console.log(data);
         // console.log(Student);
       })
       .catch((error) => {
