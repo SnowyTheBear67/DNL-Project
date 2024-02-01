@@ -64,7 +64,7 @@ const Login = (props) => {
     event.preventDefault();
     // setStudent([]);
     Api.loginUser(userLogin).then((data) => {
-      debugger;
+      // debugger;
       if (data) {
         console.log(true);
         setisLoggedIn(false);

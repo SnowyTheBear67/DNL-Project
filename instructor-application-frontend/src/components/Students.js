@@ -4,10 +4,13 @@ import Api from "../api/Api";
 
 const Students = (props) => {
   // const [id, setId] = useState("");
-  const { student, setStudent, setisLoggedIn } = props;
+  const { student, setStudent, setisLoggedIn, fetchAllStudents, userLogin } =
+    props;
   const [isAddingStudent, setIsAddingStudent] = useState(false);
+  const [isEditingStudent, setIsEditingStudent] = useState(false);
   const [isUpdateStudent, setIsUpdateStudent] = useState(false);
-  const [updatedStudent, setIsUpdatedStudent] = useState({
+  const [currEditingStudent, setcurrEditingStudent] = useState("");
+  const [updatedStudent, setUpdatedStudent] = useState({
     id: null,
     firstName: "",
     lastName: "",
@@ -15,7 +18,9 @@ const Students = (props) => {
     grade: "",
     notes: "",
     email: "",
-    instructorId: "",
+    instructor: {
+      id: "",
+    },
   });
   const [newStudent, setNewStudent] = useState({
     id: null,
@@ -54,14 +59,77 @@ const Students = (props) => {
     setStudent((prevStudents) => [...prevStudents, newStudent]);
     setIsAddingStudent(false);
   };
+  const handleSaveEditStudent = (id) => {
+    Api.updateStudent(updatedStudent);
+    console.log(id);
+
+    setStudent((prevStudents) => {
+      return prevStudents.map((s) => {
+        console.log("inside student");
+        console.log(s.id);
+        console.log("space");
+        console.log(id);
+        if (s.id === id) {
+          console.log("This is the updated student" + updatedStudent);
+        }
+        // return {
+        //   id: i,
+        //   firstName: "",
+        //   lastName: "",
+        //   grade: "",
+        //   email: "",
+        //   notes: "",
+        //   jumpClass: "",
+        //   instructor: {
+        //     id: "",
+        //   },
+        // };
+        return s.id === id ? updatedStudent : s;
+      });
+    });
+    setUpdatedStudent({
+      id: "",
+      firstName: "",
+      lastName: "",
+      grade: "",
+      email: "",
+      notes: "",
+      jumpClass: "",
+      instructor: {
+        id: "",
+      },
+    });
+    // am  adding new student insted of editing it
+    // empty the state and re render the list
+    // setStudent([]);
+    // debugger;
+    // setStudent([]);
+    // setStudent([student, updatedStudent]);
+    // setStudent([student]);
+    // setStudent((prevStudents) => [...prevStudents, updatedStudent]);
+    console.log(updatedStudent);
+    console.log("here 1");
+    // fetchAllStudents(setStudent, "test");
+    console.log("here 2");
+    setIsEditingStudent(false);
+  };
   const handleDelete = (id) => {
     Api.deleteStudent(id);
     const updatedStudents = student.filter((student) => student.id !== id);
     setStudent(updatedStudents);
   };
-  const handleEdit = () => {
-    setIsUpdateStudent(!isUpdateStudent);
+  const handleEdit = (id) => {
+    // setIsUpdateStudent(!isUpdateStudent);
+    setIsEditingStudent(!isEditingStudent);
+    const studentToEdit = student.find((s) => s.id === id);
+    console.log(id);
+    setcurrEditingStudent(id);
+    setUpdatedStudent({
+      ...updatedStudent,
+      id: id,
+    });
   };
+
   const handleAddStudents = () => {
     // debugger;
     setIsAddingStudent(!isAddingStudent);
@@ -85,93 +153,6 @@ const Students = (props) => {
           </button>
         </div>
       </div>
-      {isUpdateStudent && (
-        <div className="grid-container">
-          <div className="card border-info mb-3" style={{ maxWidth: "18rem" }}>
-            <div className="card-header">
-              <input
-                type="text"
-                placeholder="First Name"
-                value={updatedStudent.firstName}
-                onChange={(e) =>
-                  setNewStudent({
-                    ...updatedStudent,
-                    firstName: e.target.value,
-                  })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                value={updatedStudent.lastName}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, lastName: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Jump Class"
-                value={updatedStudent.jumpClass}
-                onChange={(e) =>
-                  setNewStudent({
-                    ...updatedStudent,
-                    jumpClass: e.target.value,
-                  })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Grades"
-                value={updatedStudent.grade}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, grade: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Notes"
-                value={updatedStudent.notes}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, notes: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Email"
-                value={updatedStudent.email}
-                onChange={(e) =>
-                  setNewStudent({ ...updatedStudent, email: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Instructor ID"
-                value={
-                  updatedStudent.instructor ? updatedStudent.instructor.id : ""
-                }
-                onChange={(e) =>
-                  setNewStudent({
-                    ...updatedStudent,
-                    instructor: { id: e.target.value },
-                  })
-                }
-              />
-            </div>
-            <div className="card-body">
-              {/* Add input fields for other properties of the new student */}
-            </div>
-            <div className="btn-group" role="group" aria-label="Basic example">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => handleSaveUpdatedStudent()}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {isAddingStudent && (
         <div className="grid-container">
           <div className="card border-info mb-3" style={{ maxWidth: "18rem" }}>
@@ -251,6 +232,103 @@ const Students = (props) => {
           </div>
         </div>
       )}
+      {isEditingStudent && (
+        <div className="grid-container">
+          <div className="card border-info mb-3" style={{ maxWidth: "18rem" }}>
+            <div className="card-header">
+              <input
+                type="text"
+                placeholder="First Name"
+                value={updatedStudent.firstName}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    firstName: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={updatedStudent.lastName}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    lastName: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Jump Class"
+                value={updatedStudent.jumpClass}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    jumpClass: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Grades"
+                value={updatedStudent.grade}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    grade: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Notes"
+                value={updatedStudent.notes}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    notes: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Email"
+                value={updatedStudent.email}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    email: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Instructor ID"
+                value={updatedStudent.instructor.id}
+                onChange={(e) =>
+                  setUpdatedStudent({
+                    ...updatedStudent,
+                    instructor: { id: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div className="card-body">
+              {/* Add input fields for other properties of the new student */}
+            </div>
+            <div className="btn-group" role="group" aria-label="Basic example">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSaveEditStudent(currEditingStudent)}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="grid-container">
         {student.map((student) => (
           <div
@@ -301,6 +379,18 @@ const Students = (props) => {
                   {student.notes}
                 </p>
               </div>
+              <div
+                style={{
+                  display: "flex",
+                  //   justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
+                <h5 className="card-title">Email</h5>
+                <p className="card-text" style={{ paddingLeft: "70px" }}>
+                  {student.email}
+                </p>
+              </div>
             </div>
             <div className="btn-group" role="group" aria-label="Basic example">
               {/* <button type="button" class="btn btn-secondary">
@@ -316,7 +406,7 @@ const Students = (props) => {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => handleEdit()}
+                onClick={() => handleEdit(student.id)}
               >
                 Edit
               </button>

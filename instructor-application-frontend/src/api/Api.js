@@ -10,6 +10,7 @@ const allStudentsByInstructor = (username) =>
   URI + `/api/students/instructor/${username}`;
 const allInstructor = URI + `/api/instructors`;
 const deleteStudent = (id) => URI + `/api/students/delete/${id}`;
+const updateStudent = URI + "/api/students/update";
 const addStudentEndPoint = URI + "/api/students/add";
 const Api = {
   addUser: (user) => {
@@ -58,7 +59,7 @@ const Api = {
           localStorage.setItem("jwtToken", data.jwt);
           // setisLoggedIn(false);
           // console.log(true);
-          debugger;
+          // debugger;
           return data.jwt; // Return the token from the response
         } else {
           throw new Error("Token not found in the response");
@@ -124,9 +125,9 @@ const Api = {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         // return data;
         setStudent(data);
+        console.log(data);
         // console.log(Student);
       })
       .catch((error) => {
@@ -185,6 +186,23 @@ const Api = {
       .catch((error) => {
         console.log("error detected");
         // console.log(error);
+      });
+  },
+  updateStudent: (updatedStudent) => {
+    const storedToken = localStorage.getItem("jwtToken");
+    fetch(updateStudent, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${storedToken}`,
+      },
+      body: JSON.stringify(updatedStudent),
+    })
+      .then((data) => {
+        console.log("data grabed");
+      })
+      .catch((error) => {
+        console.log("Error");
       });
   },
 };
