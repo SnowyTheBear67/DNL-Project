@@ -3,6 +3,8 @@ import Api from "../api/Api";
 
 const Login = (props) => {
   // const [id, setId] = useState("");
+  
+  const [error, setError] = useState(null);
   const {
     user,
     setUser,
@@ -41,7 +43,10 @@ const Login = (props) => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    Api.addUser(user);
+    
+    setError(null);
+    Api.addUser(user,setError)
+    .then((data) => {
     // setId(user.id);
     setUser({
       id: null,
@@ -51,6 +56,8 @@ const Login = (props) => {
       username: "",
       password: "",
       role: "ROLE_USER",
+      
+
     });
 
     console.log("submitted");
@@ -58,11 +65,17 @@ const Login = (props) => {
     // setToken();
     // debugger;
     alert(`Sign Up Success`);
-  };
+  })
+  .catch((error)=>{
+    setError(error.message || "An unexpected error occurred.");
+
+  });
+};
 
   const handleSubmitLogin = (event) => {
     event.preventDefault();
     // setStudent([]);
+    setError(null);
     Api.loginUser(userLogin).then((data) => {
       // debugger;
       if (data) {
@@ -72,6 +85,9 @@ const Login = (props) => {
       } else {
         setisLoggedIn(true);
       }
+    })
+    .catch((error)=>{
+      setError(error.message || "An unexpected error occurred.");
     });
     setUserLogin({
       username: "",
@@ -111,6 +127,8 @@ const Login = (props) => {
   };
   return (
     <div>
+      {/* Display the error message if it exists */}
+      {error && <div style={{ color: "red" }}>{error}</div>}
       <header className="head">
         <img
           src="https://www.cognixia.com/wp-content/uploads/2021/06/JUMP-cognixia.webp"
@@ -226,6 +244,7 @@ const Login = (props) => {
       </div>
     </div>
   );
+
 };
 
 export default Login;

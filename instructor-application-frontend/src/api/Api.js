@@ -13,32 +13,45 @@ const deleteStudent = (id) => URI + `/api/students/delete/${id}`;
 const updateStudent = URI + "/api/students/update";
 const addStudentEndPoint = URI + "/api/students/add";
 const Api = {
-  addUser: (user) => {
-    fetch(addInstructor, {
+  addUser: (user,setError) => {
+    return fetch(addInstructor, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
     })
       .then((result) => {
-        console.log("Result");
-        console.log(result);
+
+        if (!result.ok) {
+          throw new Error(`HTTP error! Status: ${result.status}`);
+        }
+        // console.log("Result");
+        // console.log(result);
 
         // console.log("")
         return result.json();
       })
       .then((data) => {
-        console.log("Data");
+
+        if (data.error) {
+          // Display the error message or handle it as needed
+          setError(data.error);
+          console.error("Error:", data.error);
+        //console.log("Data");
+        }
+        
         // Data goes here in state
         //     setUser(data);
         // debugger;
         // setId(data.id);
       })
       .catch((error) => {
-        console.log(error);
+        //console.log("Error",error);
+        setError(error.message || "An unexpected error occurred.");
+        throw error;
       });
   },
 
-  loginUser: (userLogin) => {
+  loginUser: (userLogin,setError) => {
     // console.log("hello");
     return fetch(loginInstructor, {
       method: "POST",
