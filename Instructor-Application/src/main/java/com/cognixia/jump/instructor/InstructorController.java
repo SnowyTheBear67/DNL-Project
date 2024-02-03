@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-
+@Validated
 @RestController
 @RequestMapping("/api")
 @Tag(name = "Instructor Controller", description = "API for managing instructors")
@@ -70,7 +71,7 @@ public class InstructorController {
 						 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Instructor.class) ) )
     @Operation(summary="Create instructor")
 	@PostMapping("/instructors")
-	public ResponseEntity<?> createInstructor( @RequestBody Instructor instructor ) {
+	public ResponseEntity<?> createInstructor(@RequestBody @Valid Instructor instructor ) {
 		
 		Instructor created = service.createInstructor(instructor);
 		
@@ -86,7 +87,7 @@ public class InstructorController {
 			})
     @Operation(summary="Update instructor in the instructor table")
 	@PutMapping("instructors/update")
-	public ResponseEntity<?> updateInstructor(@RequestBody Instructor updateInstructor) throws ResourceNotFoundException{
+	public ResponseEntity<?> updateInstructor(@RequestBody @Valid Instructor updateInstructor) throws ResourceNotFoundException{
 		
 		Instructor updated = service.updateInstructor(updateInstructor);
 		
