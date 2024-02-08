@@ -8,7 +8,9 @@ This is a full stack web application that allows instructors to create, read, up
 - Instructors can view their students
 - Instructors can add students
 - Instructors can delete students
-- Instrctors can edit students
+- Instructors can edit students
+- Spring Security implemented
+- Swagger documentation can be accessed at http://localhost:8080/swagger-ui/index.html when running the Spring Boot backend
 
 ## Installation
 
